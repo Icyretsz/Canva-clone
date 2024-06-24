@@ -75,6 +75,7 @@ const Shapes = () => {
     const {pages, setPages, currentPage} = usePages()
 
     const addElement = (type : string) => {
+        if (currentPage === 0) return;
         const newElement : Element = {
             id: pages[currentPage - 1].elements.length + 1,
             type: type,

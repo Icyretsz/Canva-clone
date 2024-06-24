@@ -22,7 +22,7 @@ export default function Home() {
         <div className='w-screen h-screen flex'>
             <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded}/>
             <div className='w-full pt-32 pl-20 bg-gray-200'>
-                <div className='fixed top-16 w-full h-16 bg-white border-b-0.5'
+                <div className='fixed top-16 w-full h-16 bg-white border-b-0.5 z-50'
                      style={canvasStylePadding}
                 >
                     Toolbar
