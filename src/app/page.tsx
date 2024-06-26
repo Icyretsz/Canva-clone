@@ -3,6 +3,8 @@ import CanvasContainer from '@/components/canvas-container'
 import {Sidebar} from "@/components/sidebar";
 import {useState} from "react";
 import {usePages} from '../context/page-context'
+import {DndContext} from '@dnd-kit/core';
+
 
 export default function Home() {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -12,7 +14,6 @@ export default function Home() {
     const resetCurrentPage: React.MouseEventHandler<HTMLDivElement> = (e) => {
         e.stopPropagation()
         setCurrentPage(0)
-        console.log('clicked')
     }
 
     const canvasStylePadding = {marginLeft: isExpanded ? '352px' : ''}
@@ -31,7 +32,9 @@ export default function Home() {
                      style={canvasStylePadding}
                      onClick={resetCurrentPage}
                 >
+                    <DndContext>
                     <CanvasContainer/>
+                    </DndContext>
                 </div>
             </div>
         </div>

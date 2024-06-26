@@ -95,6 +95,7 @@ const Shapes = () => {
                     ? { ...page, elements: [...page.elements, newElement] }
                     : page
             ))
+        console.log(newElement.id)
     }
 
     const additionalClasses = 'cursor-pointer'
