@@ -24,9 +24,6 @@ const Pages = () => {
                     y: prevState.y + offset.y,
                 }));
             }
-            if (item) {
-                item
-            }
         }
     }))
 
