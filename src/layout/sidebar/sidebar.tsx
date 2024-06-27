@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {usePages} from '../context/page-context'
-import { v4 as uuidv4 } from 'uuid'
+import ShapesMenu from '@/layout/sidebar/shapesmenu'
 
 interface ButtonProps {
     className: string,
@@ -26,30 +25,8 @@ interface ShapeProperty {
 
 type ShapeProperties = ShapeProperty[];
 
-interface Element {
-    id: number;
-    type: string;
-    content?: string;
-    src?: string;
-    position: {
-        x: number;
-        y: number;
-    };
-    size: {
-        width: number;
-        height: number;
-    };
-    backgroundColor: string;
-}
 
-interface Page {
-    pageNo : number,
-    width : number,
-    height : number,
-    backgroundColor : string
-    elements : Element[]
-}
-
+// eslint-disable-next-line react/display-name
 const Button = React.memo(({ className, onClick, text }: ButtonProps) => (
     <button className={className} onClick={onClick}>{text}</button>
 ));
@@ -64,68 +41,6 @@ const Submenu = ({menuTitle, setIsExpanded}: SubmenuProps) => (
     </div>
 );
 
-const ShapesMenu = () => {
-    return (
-        <div className='flex justify-evenly pt-6'>
-            <Shapes/>
-        </div>
-    )
-}
-
-const Shapes = () => {
-    const {pages, setPages, currentPage} = usePages()
-
-    const addElement = (type : string) => {
-        if (currentPage === 0) return;
-        const newElement : Element = {
-            id: uuidv4(),
-            type: type,
-            position: {
-                x: 500,
-                y: 500,
-            },
-            size: {
-                width: 100,
-                height: 100,
-            },
-            backgroundColor: 'black'
-        }
-        setPages((prevPages) =>
-            prevPages.map((page) =>
-                page.pageNo === currentPage
-                    ? { ...page, elements: [...page.elements, newElement] }
-                    : page
-            ))
-        console.log(newElement.id)
-    }
-
-    const additionalClasses = 'cursor-pointer'
-        return <>
-            {shapeProperties.map((shapeProperty : ShapeProperty) => {
-                return <div key={shapeProperty.id} className={`${shapeProperty.className} ${additionalClasses}`}
-                onClick={() => addElement(shapeProperty.type)}
-                ></div>
-            })}
-        </>
-}
-
-const shapeProperties : ShapeProperties = [
-    {
-        id: 1,
-        type: 'rectangle',
-        className: 'w-20 h-20 bg-gray-400'
-    },
-    {
-        id: 2,
-        type: 'circle',
-        className: 'w-20 h-20 rounded-full bg-gray-400'
-    },
-    {
-        id: 3,
-        type: 'triangle',
-        className: 'w-0 h-0 border-l-[40px] border-l-transparent border-r-[40px] border-r-transparent border-b-[80px] border-b-gray-400'
-    }
-]
 
 const Sidebar = ({isExpanded, setIsExpanded}: SidebarProps) => {
     const [selectedMenu, setSelectedMenu] = useState<string | null>(null);

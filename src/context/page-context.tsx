@@ -1,30 +1,8 @@
 'use client'
 
 import {createContext, ReactNode, useContext, useState} from "react";
+import { Page } from '../layout/interfaces'
 
-interface Element {
-    id: number;
-    type: string;
-    content?: string;
-    src?: string;
-    position: {
-        x: number;
-        y: number;
-    };
-    size: {
-        width: number;
-        height: number;
-    };
-    backgroundColor: string;
-}
-
-interface Page {
-    pageNo: number,
-    width: number,
-    height: number,
-    backgroundColor: string
-    elements: Element[]
-}
 
 interface PagesContextType {
     pages: Page[]
@@ -45,7 +23,7 @@ const firstPage: Page = {
 
 const PagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [pages, setPages] = useState<Page[]>([firstPage])
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState<number>(1)
 
     return (
         <PagesContext.Provider value={{pages, setPages, currentPage, setCurrentPage}}>
