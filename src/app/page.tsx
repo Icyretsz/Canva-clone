@@ -3,7 +3,7 @@ import CanvasContainer from '@/components/canvas-container'
 import {Sidebar} from "@/components/sidebar";
 import {useState} from "react";
 import {usePages} from '../context/page-context'
-import {DndContext} from '@dnd-kit/core';
+
 
 
 export default function Home() {
@@ -32,9 +32,7 @@ export default function Home() {
                      style={canvasStylePadding}
                      onClick={resetCurrentPage}
                 >
-                    <DndContext>
                     <CanvasContainer/>
-                    </DndContext>
                 </div>
             </div>
         </div>

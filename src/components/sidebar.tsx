@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {usePages} from '../context/page-context'
+import { v4 as uuidv4 } from 'uuid'
 
 interface ButtonProps {
     className: string,
@@ -49,9 +50,9 @@ interface Page {
     elements : Element[]
 }
 
-const Button = ({className, onClick, text}: ButtonProps) => (
+const Button = React.memo(({ className, onClick, text }: ButtonProps) => (
     <button className={className} onClick={onClick}>{text}</button>
-);
+));
 
 const Submenu = ({menuTitle, setIsExpanded}: SubmenuProps) => (
     <div className='flex flex-col w-88 h-full bg-white border-r-0.5 border-gray-200'>
@@ -77,7 +78,7 @@ const Shapes = () => {
     const addElement = (type : string) => {
         if (currentPage === 0) return;
         const newElement : Element = {
-            id: pages[currentPage - 1].elements.length + 1,
+            id: uuidv4(),
             type: type,
             position: {
                 x: 500,

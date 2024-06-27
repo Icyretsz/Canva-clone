@@ -1,28 +1,37 @@
-import {useDraggable} from '@dnd-kit/core';
-import React from "react";
+import React from 'react';
+import { useDrag, DragSourceMonitor } from 'react-dnd';
 
-type DraggableProps = {
-    id : number
-    children?: React.ReactNode;
+interface prop  {
+    type : string
+    dragItemPosition : {x : number,y : number}
 }
 
-const Draggable: React.FC<DraggableProps> = ({ id, children }) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
-        id: `draggable-${id}`,
+const Draggable: React.FC<prop> = ({type, dragItemPosition} : prop) => {
+    const [{isDragging}, drag] = useDrag({
+        type: type,
+        collect: (monitor: DragSourceMonitor) => ({
+            isDragging: !!monitor.isDragging(),
+        })
     });
 
-    const style = transform
-        ? {
-            transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-            cursor: 'move',
-        }
-        : { cursor: 'move' };
+    const style = {
+        position: 'absolute',
+        left: `${dragItemPosition.x}px`,
+        top: `${dragItemPosition.y}px`,
+        cursor: 'move',
+        backgroundColor: 'blue',
+        height: '96px',
+        width: '96px',
+        opacity: isDragging ? 0 : 1
+        // Additional styling here
+    };
+
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            {children}
+        <div ref={drag} style={style}>
+            Drag me ({type})
         </div>
     );
 };
 
-export default Draggable
+export default Draggable;
