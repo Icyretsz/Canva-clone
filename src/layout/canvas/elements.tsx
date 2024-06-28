@@ -58,7 +58,7 @@ const Elements = ({page}: ElementsProps) => {
 };
 
 const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentProp) => {
-    const {selectedElement, setSelectedElement, setCurrentPage} = usePages()
+    const {selectedElement, setSelectedElement, setCurrentPage, setPages} = usePages()
     const [elementHovered, setElementHovered] = useState(false)
     const [{isDragging}, drag] = useDrag<DragItem, unknown, { isDragging: boolean }>({
         type: `element-${pageNo}`,
@@ -90,6 +90,18 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         setCurrentPage(0)
     }
 
+    const handleDelete = (element : Element) => {
+        setPages(prevPages => {
+            return prevPages.map(page => {
+                const newElementArray = page.elements.filter(elements => elements.id !== element.id);
+                return {
+                    ...page,
+                    elements: newElementArray
+                };
+            });
+        });
+    };
+
 
     let ref = React.useRef<HTMLDivElement>(null);
 
@@ -99,20 +111,13 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         }
     }, [drag]);
 
-    const getElementPosition = (element: Element) => {
-        return (
-            {
-                left: `${element.position.x}px`,
-                top: `${element.position.y}px`
-            }
-        )
-    }
-    return (
-        <div className='flex flex-col gap-2'>
-            {(selectedElement.id === element.id && !isDragging) &&
-                <div className='bg-black w-20 h-20'
 
-                ></div>
+    return (
+        <div className='flex flex-col justify-center items-center gap-2'>
+            {(selectedElement.id === element.id && !isDragging) &&
+                <div className='w-20 h-20'
+                onClick={() => handleDelete(element)}
+                >Delete element</div>
             }
             <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
                  onClick={(e) => handleClickOnElement(element, e)}
