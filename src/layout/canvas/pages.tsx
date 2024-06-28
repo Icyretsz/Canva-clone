@@ -14,7 +14,7 @@ interface DragItem {
     };
 }
 
-interface ElementPositions  {
+interface ElementPositions {
     [key: string]: {
         x: number;
         y: number;
@@ -40,7 +40,6 @@ const Pages = () => {
     const {pages, currentPage, setCurrentPage, setSelectedElement} = usePages()
 
 
-
     const handleClickOnPage = (pageNo: number, e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         setCurrentPage(pageNo)
@@ -58,21 +57,22 @@ const Pages = () => {
     return (
         <div className='flex flex-col justify-center gap-5'>
             {pages.map((page: Page) => (
-                <PageComponent key={page.pageNo} page={page} currentPage={currentPage} getPageStyle={getPageStyle} handleClickOnPage={handleClickOnPage}/>
+                <PageComponent key={page.pageNo} page={page} currentPage={currentPage} getPageStyle={getPageStyle}
+                               handleClickOnPage={handleClickOnPage}/>
             ))}
         </div>
     );
 };
 
-    interface PageComponentProp {
-        page: Page
-        currentPage: number
-        getPageStyle: (page: Page) => React.CSSProperties;
-        handleClickOnPage: (pageNo: number, e: React.MouseEvent<HTMLDivElement>) => void
-    }
+interface PageComponentProp {
+    page: Page
+    currentPage: number
+    getPageStyle: (page: Page) => React.CSSProperties;
+    handleClickOnPage: (pageNo: number, e: React.MouseEvent<HTMLDivElement>) => void
+}
 
-const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage} : PageComponentProp) => {
-        const {setPages} = usePages()
+const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage}: PageComponentProp) => {
+    const {setPages} = usePages()
     const [{canDrop, isOver}, drop] = useDrop<DragItem, unknown, { canDrop: boolean; isOver: boolean }>(() => ({
         accept: `element-${page.pageNo}`,
         drop: (item, monitor) => {

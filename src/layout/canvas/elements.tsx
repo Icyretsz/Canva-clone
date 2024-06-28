@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Element, Page} from "@/layout/interfaces";
 import {DragSourceMonitor, useDrag} from "react-dnd";
 import {usePages} from '@/context/page-context'
@@ -11,7 +11,6 @@ interface DragItem {
         y: number;
     };
 }
-
 
 
 interface ElementsProps {
@@ -69,6 +68,12 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         })
     });
 
+    useEffect(() => {
+        if (isDragging) {
+            setSelectedElement(element)
+        }
+    }, [isDragging])
+
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         setElementHovered(true)
@@ -94,7 +99,7 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         }
     }, [drag]);
 
-    const getElementPosition = (element : Element) => {
+    const getElementPosition = (element: Element) => {
         return (
             {
                 left: `${element.position.x}px`,
@@ -103,18 +108,18 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         )
     }
     return (
-    <div>
-        {(selectedElement.id === element.id && !isDragging) &&
-            <div className='bg-black w-20 h-20 absolute'
-            style = {getElementPosition(element)}
+        <div className='flex flex-col gap-2'>
+            {(selectedElement.id === element.id && !isDragging) &&
+                <div className='bg-black w-20 h-20'
+
+                ></div>
+            }
+            <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
+                 onClick={(e) => handleClickOnElement(element, e)}
+                 onMouseEnter={(e) => handleMouseEnter(e)}
+                 onMouseLeave={handleMouseLeave}
+                 className={`${elementHovered || selectedElement.id === element.id ? 'border-2 border-black' : 'border-2 border-transparent'}`}
             ></div>
-        }
-    <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
-                onClick={(e) => handleClickOnElement(element, e)}
-                onMouseEnter={(e) => handleMouseEnter(e)}
-                onMouseLeave={handleMouseLeave}
-                className={`${elementHovered || selectedElement.id === element.id ? 'border-2 border-black' : 'border-2 border-transparent'}`}
-    ></div>
-    </div>)
+        </div>)
 }
 export default Elements;
