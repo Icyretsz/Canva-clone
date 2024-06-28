@@ -17,7 +17,7 @@ export interface ShapeProperty {
 }
 
 export interface Element {
-    id: number;
+    id: string;
     type: string;
     content?: string;
     src?: string;
@@ -36,6 +36,7 @@ export interface Element {
     borderLeft?: string
     borderRight?: string
     //for triangle
+    ofPage: number
 }
 
 export interface Page {

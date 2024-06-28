@@ -66,6 +66,7 @@ const Shapes = () => {
                 borderBottom: `${shapeProperty.size.height}px solid `,
                 borderLeft: `${shapeProperty.size.width}px solid transparent`,
                 borderRight: `${shapeProperty.size.width}px solid transparent`,
+                ofPage: currentPage
             }
         } else {
             newElement = {
@@ -80,7 +81,8 @@ const Shapes = () => {
                     x: 200,
                     y: 200,
                 },
-                backgroundColor: `${shapeProperty.backgroundColor}`
+                backgroundColor: `${shapeProperty.backgroundColor}`,
+                ofPage: currentPage
             }
         }
         setPages((prevPages) =>

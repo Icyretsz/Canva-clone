@@ -1,32 +1,25 @@
-import {Page} from "@/layout/interfaces";
+import {Element, Page} from "@/layout/interfaces";
 import {usePages} from '../../context/page-context'
 import Elements from './elements'
 
 import React, {useState} from 'react';
 import {useDrop} from "react-dnd";
 
+interface DragItem {
+    id: string;
+    pageNo: number;
+}
+
+interface ElementPositions  {
+    [key: string]: {
+        x: number;
+        y: number;
+    };
+};
+
 const Pages = () => {
     const {pages, setPages, currentPage, setCurrentPage} = usePages()
     const [pageHovered, setPageHovered] = useState<number>(0)
-
-    const [dragItemPosition, setDragItemPosition] = useState({x:0, y:0})
-    const [{canDrop, isOver}, drop] = useDrop(() => ({
-        accept: "element",
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            canDrop: monitor.canDrop(),
-        }),
-        drop: (item, monitor) => {
-            const offset = monitor.getDifferenceFromInitialOffset();
-            if (offset) {
-                setDragItemPosition(prevState => ({
-                    x: prevState.x + offset.x,
-                    y: prevState.y + offset.y,
-                }));
-            }
-        }
-    }))
-
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, pageNo: number) => {
         e.stopPropagation();
@@ -54,19 +47,56 @@ const Pages = () => {
     return (
         <div className='flex flex-col justify-center gap-5'>
             {pages.map((page: Page) => (
-            <div ref={drop} key={page.pageNo} className={`shadow-md cursor-pointer relative
-                ${page.pageNo === currentPage ? 'border-2 border-black' : ''}
-                ${pageHovered === page.pageNo ? 'border-2 border-black' : ''}
-                `}
-                 style={getPageStyle(page)}
-                 onClick={(e) => handleClickOnPage(page.pageNo, e)}
-                 onMouseEnter={(e) => handleMouseEnter(e, page.pageNo)}
-                 onMouseLeave={handleMouseLeave}
-            >
-                <Elements page={page} dragItemPosition={dragItemPosition}/>
-            </div>))}
+                <PageComponent key={page.pageNo} page={page} currentPage={currentPage} pageHovered={pageHovered} getPageStyle={getPageStyle} handleClickOnPage={handleClickOnPage} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave}/>
+            ))}
         </div>
     );
 };
+
+    interface PageComponentProp {
+        page : Page
+        currentPage : number
+        pageHovered : number
+        getPageStyle: (page :Page) => React.CSSProperties;
+        handleClickOnPage: (pageNo: number, e: React.MouseEvent<HTMLDivElement>) => void
+        handleMouseEnter: (e: React.MouseEvent<HTMLDivElement>, pageNo: number) => void
+        handleMouseLeave: (e: React.MouseEvent<HTMLDivElement>) => void
+    }
+
+const PageComponent = ({page, currentPage, pageHovered, getPageStyle, handleClickOnPage, handleMouseEnter, handleMouseLeave} : PageComponentProp) => {
+    const [elementPositions, setElementPositions] = useState<ElementPositions>({});
+    const [{canDrop, isOver}, drop] = useDrop<DragItem, unknown, { canDrop: boolean; isOver: boolean }>(() => ({
+        accept: `element-${page.pageNo}`,
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+        }),
+        drop: (item, monitor) => {
+            const offset = monitor.getDifferenceFromInitialOffset();
+            if (offset) {
+                setElementPositions(prevPositions => ({
+                    ...prevPositions,
+                    [item.id]: {
+                        x: (prevPositions[item.id]?.x || 0) + offset.x,
+                        y: (prevPositions[item.id]?.y || 0) + offset.y,
+                    }
+                }));
+            }
+        }
+    }))
+    return (
+        <div ref={drop} key={page.pageNo} className={`shadow-md cursor-pointer relative
+                ${page.pageNo === currentPage ? 'border-2 border-black' : 'border-2 border-transparent'}
+                ${pageHovered === page.pageNo ? 'border-2 border-black' : 'border-2 border-transparent'}
+                `}
+             style={getPageStyle(page)}
+             onClick={(e) => handleClickOnPage(page.pageNo, e)}
+             onMouseEnter={(e) => handleMouseEnter(e, page.pageNo)}
+             onMouseLeave={handleMouseLeave}
+        >
+            <Elements page={page} elementPositions={elementPositions}/>
+        </div>
+    )
+}
 
 export default Pages;
