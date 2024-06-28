@@ -1,5 +1,5 @@
-import {Element, Page} from "@/layout/interfaces";
-import {usePages} from '../../context/page-context'
+import { Page} from "@/layout/interfaces";
+import {usePages} from '@/context/page-context'
 import Elements from './elements'
 
 import React, {useState} from 'react';
@@ -19,10 +19,10 @@ interface ElementPositions  {
         x: number;
         y: number;
     };
-};
+}
 
 const Pages = () => {
-    const {pages, setPages, currentPage, setCurrentPage} = usePages()
+    const {pages, currentPage, setCurrentPage} = usePages()
     const [pageHovered, setPageHovered] = useState<number>(0)
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, pageNo: number) => {
