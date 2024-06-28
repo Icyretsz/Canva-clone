@@ -8,6 +8,10 @@ import {useDrop} from "react-dnd";
 interface DragItem {
     id: string;
     pageNo: number;
+    position: {
+        x: number;
+        y: number;
+    };
 }
 
 interface ElementPositions  {
@@ -73,14 +77,17 @@ const PageComponent = ({page, currentPage, pageHovered, getPageStyle, handleClic
         }),
         drop: (item, monitor) => {
             const offset = monitor.getDifferenceFromInitialOffset();
+
             if (offset) {
-                setElementPositions(prevPositions => ({
+                setElementPositions(prevPositions => {
+                    const initialPosition = prevPositions[item.id] || item.position;
+                    return {
                     ...prevPositions,
                     [item.id]: {
-                        x: (prevPositions[item.id]?.x || 0) + offset.x,
-                        y: (prevPositions[item.id]?.y || 0) + offset.y,
+                        x: initialPosition.x + offset.x,
+                        y: initialPosition.y + offset.y,
                     }
-                }));
+                }});
             }
         }
     }))

@@ -5,6 +5,10 @@ import {DragSourceMonitor, useDrag} from "react-dnd";
 interface DragItem {
     id: string;
     pageNo: number;
+    position: {
+        x: number;
+        y: number;
+    };
 }
 
 interface ElementPositions  {
@@ -15,7 +19,7 @@ interface ElementPositions  {
 }
 
 
-interface ElementsProp  {
+interface ElementsProps  {
     page : Page,
     elementPositions : ElementPositions
 }
@@ -26,20 +30,22 @@ interface ElementComponentProp {
     pageNo: number;
 }
 
-const Elements = ({ page, elementPositions }: ElementsProp) => {
-
-    const getElementStyle = (element: Element): React.CSSProperties => ({
-        height: `${element.size.height}px`,
-        width: `${element.size.width}px`,
-        backgroundColor: element.type === 'triangle' ? 'white' : element.backgroundColor,
-        position: 'absolute',
-        top: `${(elementPositions[element.id]?.y || element.position.y)}px`,
-        left: `${(elementPositions[element.id]?.x || element.position.x)}px`,
-        borderRadius: element.type === 'circle' ? '100%' : '0',
-        borderBottom: `${element.type === 'triangle' ? element.size.height : 0}px solid ${element.backgroundColor}`,
-        borderLeft: `${element.type === 'triangle' ? element.size.width : 0}px solid transparent`,
-        borderRight: `${element.type === 'triangle' ? element.size.width : 0}px solid transparent`,
-    });
+const Elements = ({ page, elementPositions }: ElementsProps) => {
+    const getElementStyle = (element: Element): React.CSSProperties => {
+        const position = elementPositions[element.id] || element.position;
+        return {
+            height: `${element.size.height}px`,
+            width: `${element.size.width}px`,
+            backgroundColor: element.type === 'triangle' ? 'white' : element.backgroundColor,
+            position: 'absolute',
+            top: `${position.y}px`,
+            left: `${position.x}px`,
+            borderRadius: element.type === 'circle' ? '100%' : '0',
+            borderBottom: `${element.type === 'triangle' ? element.size.height : 0}px solid ${element.backgroundColor}`,
+            borderLeft: `${element.type === 'triangle' ? element.size.width : 0}px solid transparent`,
+            borderRight: `${element.type === 'triangle' ? element.size.width : 0}px solid transparent`,
+        };
+    };
 
     return (
         <div>
@@ -53,7 +59,7 @@ const Elements = ({ page, elementPositions }: ElementsProp) => {
 const ElementComponent = ({element, getElementStyle, pageNo} : ElementComponentProp) => {
     const [{isDragging}, drag] = useDrag<DragItem, unknown, { isDragging: boolean }>({
         type: `element-${pageNo}`,
-        item: { id: element.id, pageNo },
+        item: { id: element.id, pageNo, position: {x: element.position.x, y: element.position.y} },
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         })
