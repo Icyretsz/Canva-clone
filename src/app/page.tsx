@@ -1,8 +1,8 @@
 'use client'
 import CanvasContainer from '@/layout/canvas/canvas-container'
 import {Sidebar} from "@/layout/sidebar/sidebar";
-import {useState} from "react";
-import {usePages} from '../context/page-context'
+import React, {useState} from "react";
+import {usePages} from '@/context/page-context'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 

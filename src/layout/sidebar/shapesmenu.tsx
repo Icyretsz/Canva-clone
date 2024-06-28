@@ -45,7 +45,7 @@ const ShapesMenu = () => {
 }
 
 const Shapes = () => {
-    const {pages, setPages, currentPage} = usePages()
+    const { setPages, currentPage} = usePages()
 
     const addElement = (shapeProperty: ShapeProperty) => {
         if (currentPage === 0) return;
@@ -106,7 +106,6 @@ const Shapes = () => {
         borderRight: `${shape.type === 'triangle' ? shape.size.width : 0}px solid transparent`,
     })
 
-    const additionalClasses = 'cursor-pointer'
 
     return <>
         {shapeProperties.map((shape: ShapeProperty) => {
