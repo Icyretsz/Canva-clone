@@ -101,11 +101,27 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         }
     }, [drag]);
 
-    return <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
+    const getElementPosition = (element : Element) => {
+        return (
+            {
+                left: `${element.position.x}px`,
+                top: `${element.position.y}px`
+            }
+        )
+    }
+    return (
+    <>
+        {(selectedElement.id === element.id && !isDragging) &&
+            <div className='bg-black w-20 h-20 absolute'
+            style = {getElementPosition(element)}
+            ></div>
+        }
+    <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
                 onClick={(e) => handleClickOnElement(element, e)}
                 onMouseEnter={(e) => handleMouseEnter(e)}
                 onMouseLeave={handleMouseLeave}
                 className={`${elementHovered || selectedElement.id === element.id ? 'border-2 border-black' : 'border-2 border-transparent'}`}
     ></div>
+    </>)
 }
 export default Elements;

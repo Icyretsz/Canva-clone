@@ -75,10 +75,6 @@ const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage} : Pa
     const [elementPositions, setElementPositions] = useState<ElementPositions>({});
     const [{canDrop, isOver}, drop] = useDrop<DragItem, unknown, { canDrop: boolean; isOver: boolean }>(() => ({
         accept: `element-${page.pageNo}`,
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            canDrop: monitor.canDrop(),
-        }),
         drop: (item, monitor) => {
             const offset = monitor.getDifferenceFromInitialOffset();
 
