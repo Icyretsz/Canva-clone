@@ -1,7 +1,7 @@
 'use client'
 
 import React, {createContext, ReactNode, useContext, useState} from "react";
-import { Page } from '@/layout/interfaces'
+import { Page, Element } from '@/layout/interfaces'
 
 
 interface PagesContextType {
@@ -9,6 +9,8 @@ interface PagesContextType {
     setPages: React.Dispatch<React.SetStateAction<Page[]>>
     currentPage: number
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+    selectedElement: Element
+    setSelectedElement: React.Dispatch<React.SetStateAction<Element>>
 }
 
 const PagesContext = createContext<PagesContextType | undefined>(undefined);
@@ -21,12 +23,28 @@ const firstPage: Page = {
     elements: []
 }
 
+const initialElementState: Element = {
+    id: '',
+    type: '',
+    position: {
+        x: 0,
+        y: 0,
+    },
+    size: {
+        width: 0,
+        height: 0,
+    },
+    backgroundColor: '',
+    ofPage: 0,
+};
+
 const PagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [pages, setPages] = useState<Page[]>([firstPage])
     const [currentPage, setCurrentPage] = useState<number>(1)
+    const [selectedElement, setSelectedElement] = useState<Element>(initialElementState)
 
     return (
-        <PagesContext.Provider value={{pages, setPages, currentPage, setCurrentPage}}>
+        <PagesContext.Provider value={{pages, setPages, currentPage, setCurrentPage, selectedElement, setSelectedElement}}>
             {children}
         </PagesContext.Provider>
     )

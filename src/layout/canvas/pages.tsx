@@ -1,4 +1,4 @@
-import { Page} from "@/layout/interfaces";
+import {Element, Page} from "@/layout/interfaces";
 import {usePages} from '@/context/page-context'
 import Elements from './elements'
 
@@ -21,8 +21,23 @@ interface ElementPositions  {
     };
 }
 
+const initialElementState: Element = {
+    id: '',
+    type: '',
+    position: {
+        x: 0,
+        y: 0,
+    },
+    size: {
+        width: 0,
+        height: 0,
+    },
+    backgroundColor: '',
+    ofPage: 0,
+};
+
 const Pages = () => {
-    const {pages, currentPage, setCurrentPage} = usePages()
+    const {pages, currentPage, setCurrentPage, setSelectedElement} = usePages()
     const [pageHovered, setPageHovered] = useState<number>(0)
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, pageNo: number) => {
@@ -38,6 +53,7 @@ const Pages = () => {
     const handleClickOnPage = (pageNo: number, e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         setCurrentPage(pageNo)
+        setSelectedElement(initialElementState)
     }
 
     const getPageStyle = (page: Page) => ({

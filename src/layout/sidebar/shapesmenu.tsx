@@ -101,9 +101,9 @@ const Shapes = () => {
         //for circle
         borderRadius: shape.type === 'circle' ? '100%' : '0',
         //for triangle
-        borderBottom: `${shape.type === 'triangle' ? shape.size.height : 0}px solid ${shape.backgroundColor}`,
-        borderLeft: `${shape.type === 'triangle' ? shape.size.width : 0}px solid transparent`,
-        borderRight: `${shape.type === 'triangle' ? shape.size.width : 0}px solid transparent`,
+        borderBottom: shape.type === 'triangle' ? `${shape.size.height}px solid ${shape.backgroundColor}`: "",
+        borderLeft: shape.type === 'triangle' ? `${shape.size.width}px solid transparent`: "",
+        borderRight: shape.type === 'triangle' ? `${shape.size.width}px solid transparent`: "",
     })
 
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Element, Page} from "@/layout/interfaces";
 import {DragSourceMonitor, useDrag} from "react-dnd";
+import {usePages} from '@/context/page-context'
 
 interface DragItem {
     id: string;
@@ -11,7 +12,7 @@ interface DragItem {
     };
 }
 
-interface ElementPositions  {
+interface ElementPositions {
     [key: string]: {
         x: number;
         y: number;
@@ -19,9 +20,9 @@ interface ElementPositions  {
 }
 
 
-interface ElementsProps  {
-    page : Page,
-    elementPositions : ElementPositions
+interface ElementsProps {
+    page: Page,
+    elementPositions: ElementPositions
 }
 
 interface ElementComponentProp {
@@ -30,10 +31,12 @@ interface ElementComponentProp {
     pageNo: number;
 }
 
-const Elements = ({ page, elementPositions }: ElementsProps) => {
+const Elements = ({page, elementPositions}: ElementsProps) => {
+
+
     const getElementStyle = (element: Element): React.CSSProperties => {
         const position = elementPositions[element.id] || element.position;
-        return {
+        const style: React.CSSProperties = {
             height: `${element.size.height}px`,
             width: `${element.size.width}px`,
             backgroundColor: element.type === 'triangle' ? 'white' : element.backgroundColor,
@@ -41,29 +44,54 @@ const Elements = ({ page, elementPositions }: ElementsProps) => {
             top: `${position.y}px`,
             left: `${position.x}px`,
             borderRadius: element.type === 'circle' ? '100%' : '0',
-            borderBottom: `${element.type === 'triangle' ? element.size.height : 0}px solid ${element.backgroundColor}`,
-            borderLeft: `${element.type === 'triangle' ? element.size.width : 0}px solid transparent`,
-            borderRight: `${element.type === 'triangle' ? element.size.width : 0}px solid transparent`,
         };
+
+        if (element.type === 'triangle') {
+            style.borderBottom = `${element.size.height}px solid ${element.backgroundColor}`;
+            style.borderLeft = `${element.size.width}px solid transparent`;
+            style.borderRight = `${element.size.width}px solid transparent`;
+        }
+
+        return style;
     };
 
     return (
         <div>
-            {page.elements.map((element : Element) => (
-                <ElementComponent key={element.id} element={element} getElementStyle={getElementStyle} pageNo={page.pageNo} />
+            {page.elements.map((element: Element) => (
+                <ElementComponent key={element.id} element={element} getElementStyle={getElementStyle}
+                                  pageNo={page.pageNo}/>
             ))}
         </div>
     );
 };
 
-const ElementComponent = ({element, getElementStyle, pageNo} : ElementComponentProp) => {
+const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentProp) => {
+    const {selectedElement, setSelectedElement, setCurrentPage} = usePages()
+    const [elementHovered, setElementHovered] = useState(false)
     const [{isDragging}, drag] = useDrag<DragItem, unknown, { isDragging: boolean }>({
         type: `element-${pageNo}`,
-        item: { id: element.id, pageNo, position: {x: element.position.x, y: element.position.y} },
+        item: {id: element.id, pageNo, position: {x: element.position.x, y: element.position.y}},
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         })
     });
+
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        setElementHovered(true)
+    }
+
+    const handleMouseLeave: React.MouseEventHandler<HTMLDivElement> = (e) => {
+        e.stopPropagation();
+        setElementHovered(false)
+    }
+
+    const handleClickOnElement = (element: Element, e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        setSelectedElement(element)
+        setCurrentPage(0)
+    }
+
 
     let ref = React.useRef<HTMLDivElement>(null);
 
@@ -73,6 +101,11 @@ const ElementComponent = ({element, getElementStyle, pageNo} : ElementComponentP
         }
     }, [drag]);
 
-    return <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}></div>
+    return <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
+                onClick={(e) => handleClickOnElement(element, e)}
+                onMouseEnter={(e) => handleMouseEnter(e)}
+                onMouseLeave={handleMouseLeave}
+                className={`${elementHovered || selectedElement.id === element.id ? 'border-2 border-black' : 'border-2 border-transparent'}`}
+    ></div>
 }
 export default Elements;

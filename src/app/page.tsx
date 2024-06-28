@@ -22,7 +22,7 @@ export default function Home() {
 
     return (
 
-        <div className='w-screen h-screen flex'>
+        <div className='w-screen flex'>
             <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded}/>
             <div className='w-full pt-32 pl-20 bg-gray-200'>
                 <div className='fixed top-16 w-full h-16 bg-white border-b-0.5 z-50'
@@ -30,7 +30,7 @@ export default function Home() {
                 >
                     Toolbar
                 </div>
-                <div className={`flex justify-center items-start pt-28 h-full border-gray-400`}
+                <div className={`flex justify-center items-start pt-28 border-gray-400`}
                      style={canvasStylePadding}
                      onClick={resetCurrentPage}
                 >
