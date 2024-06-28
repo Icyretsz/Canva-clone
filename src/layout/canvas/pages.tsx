@@ -72,22 +72,31 @@ const Pages = () => {
     }
 
 const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage} : PageComponentProp) => {
-    const [elementPositions, setElementPositions] = useState<ElementPositions>({});
+        const {setPages} = usePages()
     const [{canDrop, isOver}, drop] = useDrop<DragItem, unknown, { canDrop: boolean; isOver: boolean }>(() => ({
         accept: `element-${page.pageNo}`,
         drop: (item, monitor) => {
             const offset = monitor.getDifferenceFromInitialOffset();
 
             if (offset) {
-                setElementPositions(prevPositions => {
-                    const initialPosition = prevPositions[item.id] || item.position;
-                    return {
-                    ...prevPositions,
-                    [item.id]: {
-                        x: initialPosition.x + offset.x,
-                        y: initialPosition.y + offset.y,
-                    }
-                }});
+                setPages(prevPages => {
+                    return prevPages.map(page => ({
+                        ...page,
+                        elements: page.elements.map(element => {
+                            if (element.id === item.id) {
+                                const initialPosition = element.position;
+                                return {
+                                    ...element,
+                                    position: {
+                                        x: initialPosition.x + offset.x,
+                                        y: initialPosition.y + offset.y,
+                                    }
+                                };
+                            }
+                            return element;
+                        })
+                    }));
+                })
             }
         }
     }))
@@ -107,7 +116,7 @@ const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage} : Pa
              style={getPageStyle(page)}
              onClick={(e) => handleClickOnPage(page.pageNo, e)}
         >
-            <Elements page={page} elementPositions={elementPositions}/>
+            <Elements page={page}/>
         </div>
     )
 }

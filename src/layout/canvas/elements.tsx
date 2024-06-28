@@ -12,17 +12,10 @@ interface DragItem {
     };
 }
 
-interface ElementPositions {
-    [key: string]: {
-        x: number;
-        y: number;
-    };
-}
 
 
 interface ElementsProps {
     page: Page,
-    elementPositions: ElementPositions
 }
 
 interface ElementComponentProp {
@@ -31,18 +24,18 @@ interface ElementComponentProp {
     pageNo: number;
 }
 
-const Elements = ({page, elementPositions}: ElementsProps) => {
+const Elements = ({page}: ElementsProps) => {
 
 
     const getElementStyle = (element: Element): React.CSSProperties => {
-        const position = elementPositions[element.id] || element.position;
+
         const style: React.CSSProperties = {
             height: `${element.size.height}px`,
             width: `${element.size.width}px`,
             backgroundColor: element.type === 'triangle' ? 'white' : element.backgroundColor,
             position: 'absolute',
-            top: `${position.y}px`,
-            left: `${position.x}px`,
+            top: `${element.position.y}px`,
+            left: `${element.position.x}px`,
             borderRadius: element.type === 'circle' ? '100%' : '0',
         };
 
@@ -110,7 +103,7 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         )
     }
     return (
-    <>
+    <div>
         {(selectedElement.id === element.id && !isDragging) &&
             <div className='bg-black w-20 h-20 absolute'
             style = {getElementPosition(element)}
@@ -122,6 +115,6 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
                 onMouseLeave={handleMouseLeave}
                 className={`${elementHovered || selectedElement.id === element.id ? 'border-2 border-black' : 'border-2 border-transparent'}`}
     ></div>
-    </>)
+    </div>)
 }
 export default Elements;
