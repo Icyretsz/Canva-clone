@@ -91,8 +91,17 @@ const PageComponent = ({page, currentPage, pageHovered, getPageStyle, handleClic
             }
         }
     }))
+
+    let ref = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (ref.current !== null) {
+            drop(ref.current);
+        }
+    }, [drop]);
+
     return (
-        <div ref={drop} key={page.pageNo} className={`shadow-md cursor-pointer relative
+        <div ref={ref} key={page.pageNo} className={`shadow-md cursor-pointer relative
                 ${page.pageNo === currentPage ? 'border-2 border-black' : 'border-2 border-transparent'}
                 ${pageHovered === page.pageNo ? 'border-2 border-black' : 'border-2 border-transparent'}
                 `}

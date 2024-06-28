@@ -64,8 +64,15 @@ const ElementComponent = ({element, getElementStyle, pageNo} : ElementComponentP
             isDragging: monitor.isDragging(),
         })
     });
-    return (
-        <div ref={drag} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}></div>
-    )
+
+    let ref = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (ref.current !== null) {
+            drag(ref.current);
+        }
+    }, [drag]);
+
+    return <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}></div>
 }
 export default Elements;
