@@ -115,7 +115,7 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
     return (
         <div className='flex flex-col justify-center items-center gap-2'>
             {(selectedElement.id === element.id && !isDragging) &&
-                <div className='w-20 h-20'
+                <div className='w-20 h-20 border-2 border-black cursor-pointer'
                 onClick={() => handleDelete(element)}
                 >Delete element</div>
             }

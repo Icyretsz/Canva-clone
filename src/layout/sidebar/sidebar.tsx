@@ -37,7 +37,7 @@ const Submenu = ({menuTitle, setIsExpanded}: SubmenuProps) => (
             {menuTitle}
             <span className='cursor-pointer pr-4' onClick={() => setIsExpanded(false)}>X</span>
         </div>
-        <ShapesMenu/>
+        {menuTitle === 'Shape' ? <ShapesMenu/> : ''}
     </div>
 );
 

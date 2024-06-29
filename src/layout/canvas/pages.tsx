@@ -110,7 +110,7 @@ const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage}: Pag
     }, [drop]);
 
     return (
-        <div ref={ref} key={page.pageNo} className={`shadow-md cursor-pointer relative
+        <div ref={ref} key={page.pageNo} className={`shadow-md relative
                 ${page.pageNo === currentPage ? 'border-2 border-black' : 'border-2 border-transparent'}
                 `}
              style={getPageStyle(page)}
