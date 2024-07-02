@@ -8,7 +8,7 @@ type ShapeProperties = ShapeProperty[];
 const shapeProperties: ShapeProperties = [
     {
         id: 1,
-        type: 'rectangle',
+        shapeType: 'rectangle',
         size: {
             height: 80,
             width: 80
@@ -17,7 +17,7 @@ const shapeProperties: ShapeProperties = [
     },
     {
         id: 2,
-        type: 'circle',
+        shapeType: 'circle',
         size: {
             height: 80,
             width: 80
@@ -27,7 +27,7 @@ const shapeProperties: ShapeProperties = [
     },
     {
         id: 3,
-        type: 'triangle',
+        shapeType: 'triangle',
         size: {
             height: 80,
             width: 40
@@ -50,10 +50,11 @@ const Shapes = () => {
     const addElement = (shapeProperty: ShapeProperty) => {
         if (currentPage === 0) return;
         let newElement: Element
-        if (shapeProperty.type === 'triangle') {
+        if (shapeProperty.shapeType === 'triangle') {
             newElement = {
                 id: uuidv4(),
-                type: shapeProperty.type,
+                type: 'shape',
+                shapeType: shapeProperty.shapeType,
                 size: {
                     width: 0,
                     height: 0
@@ -71,8 +72,9 @@ const Shapes = () => {
         } else {
             newElement = {
                 id: uuidv4(),
-                type: shapeProperty.type,
-                borderRadius: shapeProperty.type === 'circle' ? '100%' : '0',
+                type: 'shape',
+                shapeType: shapeProperty.shapeType,
+                borderRadius: shapeProperty.shapeType === 'circle' ? '100%' : '0',
                 size: {
                     width: 100,
                     height: 100,
@@ -96,13 +98,13 @@ const Shapes = () => {
     const getShapeProperties = (shape : ShapeProperty) => ({
         width: shape.size.width,
         height: shape.size.height,
-        backgroundColor: shape.type === 'triangle' ? 'white' : shape.backgroundColor,
+        backgroundColor: shape.shapeType === 'triangle' ? 'white' : shape.backgroundColor,
         //for circle
-        borderRadius: shape.type === 'circle' ? '100%' : '0',
+        borderRadius: shape.shapeType === 'circle' ? '100%' : '0',
         //for triangle
-        borderBottom: shape.type === 'triangle' ? `${shape.size.height}px solid ${shape.backgroundColor}`: "",
-        borderLeft: shape.type === 'triangle' ? `${shape.size.width}px solid transparent`: "",
-        borderRight: shape.type === 'triangle' ? `${shape.size.width}px solid transparent`: "",
+        borderBottom: shape.shapeType === 'triangle' ? `${shape.size.height}px solid ${shape.backgroundColor}`: "",
+        borderLeft: shape.shapeType === 'triangle' ? `${shape.size.width}px solid transparent`: "",
+        borderRight: shape.shapeType === 'triangle' ? `${shape.size.width}px solid transparent`: "",
     })
 
 

@@ -2,7 +2,7 @@ import React from "react";
 
 export interface ShapeProperty {
     id : number,
-    type: string,
+    shapeType: string,
     size: {
         width: number;
         height: number;
@@ -19,6 +19,7 @@ export interface ShapeProperty {
 export interface Element {
     id: string;
     type: string;
+    shapeType?: string,
     content?: string;
     src?: string;
     position: {

@@ -1,7 +1,6 @@
 import {Element, Page} from "@/layout/interfaces";
 import {usePages} from '@/context/PageContext'
 import Elements from './Elements'
-import CustomDragLayer from './CustomDragLayer'
 import {useDrop} from "react-dnd";
 import React from "react";
 
@@ -109,7 +108,7 @@ const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage}: Pag
              style={getPageStyle(page)}
              onClick={(e) => handleClickOnPage(page.pageNo, e)}
         >
-            <CustomDragLayer/>
+
             <Elements page={page}/>
         </div>
     )

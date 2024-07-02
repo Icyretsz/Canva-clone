@@ -1,35 +1,43 @@
-import { DragLayerMonitor, useDragLayer } from 'react-dnd'
+import { DragLayerMonitor, useDragLayer } from 'react-dnd';
+import { Element } from '../interfaces';
+import React from 'react';
 
-const CustomDragLayer: React.FC = () => {
+interface CustomDragLayerProp {
+    getElementStyle: (element: Element) => React.CSSProperties;
+}
 
-    const {isDragging, currentOffset, item} = useDragLayer(
-        (monitor: DragLayerMonitor) => {
-            return {
-                isDragging: monitor.isDragging(),
-                currentOffset: monitor.getSourceClientOffset(),
-                item: monitor.getItem()
-            };
-        }
+const CustomDragLayer: React.FC<CustomDragLayerProp> = ({ getElementStyle }) => {
+    const { isDragging, currentOffset, item } = useDragLayer((monitor: DragLayerMonitor) => ({
+        isDragging: monitor.isDragging(),
+        currentOffset: monitor.getSourceClientOffset(),
+        item: monitor.getItem(),
+    }));
+
+    if (!isDragging || !currentOffset || !item) {
+        return null;
+    }
+
+    const { element } = item as { element: Element };
+
+    const elementStyle: React.CSSProperties = {
+        ...getElementStyle(element),
+        borderWidth: '2px',
+        borderStyle: 'solid',
+        borderColor: 'black',
+    };
+
+    return (
+        <div
+            style={{
+                ...elementStyle,
+                transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                pointerEvents: 'none',
+            }}
+        />
     );
-
-    return isDragging && currentOffset
-        ? <div style={{
-            // functional
-            transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            pointerEvents: 'none',
-
-            // design only
-
-            width: '100px',
-            height: '100px',
-
-            backgroundColor: 'gray'
-        }}>
-        </div>
-        : null;
 };
 
 export default CustomDragLayer;

@@ -1,8 +1,9 @@
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Element, Page} from "@/layout/interfaces";
 import {DragSourceMonitor, useDrag} from "react-dnd";
 import {usePages} from '@/context/PageContext'
 import {getEmptyImage} from "react-dnd-html5-backend";
+import CustomDragLayer from "@/layout/canvas/CustomDragLayer";
 
 interface DragItem {
     id: string;
@@ -11,8 +12,8 @@ interface DragItem {
         x: number;
         y: number;
     };
+    element : Element
 }
-
 
 interface ElementsProps {
     page: Page,
@@ -24,31 +25,28 @@ interface ElementComponentProp {
     pageNo: number;
 }
 
-const ElementComponent = () => {
-
-}
-
 // eslint-disable-next-line react/display-name
 const Elements = React.memo(({page}: ElementsProps) => {
 
     const getElementStyle = (element: Element): React.CSSProperties => {
+        let style: React.CSSProperties = {}
+        if (element.type == 'shape') {
+            style = {
+                height: `${element.size.height}px`,
+                width: `${element.size.width}px`,
+                backgroundColor: element.shapeType === 'triangle' ? 'white' : element.backgroundColor,
+                position: 'absolute',
+                top: `${element.position.y}px`,
+                left: `${element.position.x}px`,
+                borderRadius: element.shapeType === 'circle' ? '100%' : '0',
+            };
 
-        const style: React.CSSProperties = {
-            height: `${element.size.height}px`,
-            width: `${element.size.width}px`,
-            backgroundColor: element.type === 'triangle' ? 'white' : element.backgroundColor,
-            position: 'absolute',
-            top: `${element.position.y}px`,
-            left: `${element.position.x}px`,
-            borderRadius: element.type === 'circle' ? '100%' : '0',
-        };
-
-        if (element.type === 'triangle') {
-            style.borderBottom = `${element.size.height}px solid ${element.backgroundColor}`;
-            style.borderLeft = `${element.size.width}px solid transparent`;
-            style.borderRight = `${element.size.width}px solid transparent`;
+            if (element.shapeType === 'triangle') {
+                style.borderBottom = `${element.size.height}px solid ${element.backgroundColor}`;
+                style.borderLeft = `${element.size.width}px solid transparent`;
+                style.borderRight = `${element.size.width}px solid transparent`;
+            }
         }
-
         return style;
     };
 
@@ -56,7 +54,7 @@ const Elements = React.memo(({page}: ElementsProps) => {
         <div>
             {page.elements.map((element: Element) => (
                 <DraggableComponent key={element.id} element={element} getElementStyle={getElementStyle}
-                                  pageNo={page.pageNo}/>
+                                    pageNo={page.pageNo}/>
             ))}
         </div>
     );
@@ -67,12 +65,11 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
     const [elementHovered, setElementHovered] = useState(false)
     const [{isDragging}, drag, dragPreview] = useDrag<DragItem, unknown, { isDragging: boolean }>({
         type: `element-${pageNo}`,
-        item: {id: element.id, pageNo, position: {x: element.position.x, y: element.position.y}},
+        item: {id: element.id, pageNo, position: {x: element.position.x, y: element.position.y}, element},
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         })
     });
-
 
 
     useEffect(() => {
@@ -97,7 +94,7 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
         setCurrentPage(0)
     }
 
-    const handleDelete = (element : Element) => {
+    const handleDelete = (element: Element) => {
         setPages(prevPages => {
             return prevPages.map(page => {
                 const newElementArray = page.elements.filter(elements => elements.id !== element.id);
@@ -110,7 +107,7 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
     };
 
     useEffect(() => {
-        dragPreview(getEmptyImage(), { captureDraggingState: true });
+        dragPreview(getEmptyImage(), {captureDraggingState: true});
     }, []);
 
     let ref = React.useRef<HTMLDivElement>(null);
@@ -125,9 +122,10 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
         <div className='flex flex-col justify-center items-center gap-2'>
             {(selectedElement.id === element.id && !isDragging) &&
                 <div className='w-20 h-20 border-2 border-black cursor-pointer'
-                onClick={() => handleDelete(element)}
+                     onClick={() => handleDelete(element)}
                 >Delete element</div>
             }
+            <CustomDragLayer getElementStyle={getElementStyle}/>
             <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
                  onClick={(e) => handleClickOnElement(element, e)}
                  onMouseEnter={(e) => handleMouseEnter(e)}
