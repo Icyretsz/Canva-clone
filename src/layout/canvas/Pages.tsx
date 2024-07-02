@@ -1,21 +1,13 @@
 import {Element, Page} from "@/layout/interfaces";
 import {usePages} from '@/context/PageContext'
 import Elements from './Elements'
-
-import React, {useState} from 'react';
+import CustomDragLayer from './CustomDragLayer'
 import {useDrop} from "react-dnd";
 
 interface DragItem {
     id: string;
     pageNo: number;
     position: {
-        x: number;
-        y: number;
-    };
-}
-
-interface ElementPositions {
-    [key: string]: {
         x: number;
         y: number;
     };
@@ -116,6 +108,7 @@ const PageComponent = ({page, currentPage, getPageStyle, handleClickOnPage}: Pag
              style={getPageStyle(page)}
              onClick={(e) => handleClickOnPage(page.pageNo, e)}
         >
+            <CustomDragLayer/>
             <Elements page={page}/>
         </div>
     )

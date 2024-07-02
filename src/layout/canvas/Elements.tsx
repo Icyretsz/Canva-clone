@@ -1,7 +1,8 @@
-import React, {CSSProperties, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {Element, Page} from "@/layout/interfaces";
 import {DragSourceMonitor, useDrag} from "react-dnd";
 import {usePages} from '@/context/PageContext'
+import {getEmptyImage} from "react-dnd-html5-backend";
 
 interface DragItem {
     id: string;
@@ -21,6 +22,10 @@ interface ElementComponentProp {
     element: Element;
     getElementStyle: (element: Element) => React.CSSProperties;
     pageNo: number;
+}
+
+const ElementComponent = () => {
+
 }
 
 // eslint-disable-next-line react/display-name
@@ -50,23 +55,25 @@ const Elements = React.memo(({page}: ElementsProps) => {
     return (
         <div>
             {page.elements.map((element: Element) => (
-                <ElementComponent key={element.id} element={element} getElementStyle={getElementStyle}
+                <DraggableComponent key={element.id} element={element} getElementStyle={getElementStyle}
                                   pageNo={page.pageNo}/>
             ))}
         </div>
     );
 });
 
-const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentProp) => {
+const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponentProp) => {
     const {selectedElement, setSelectedElement, setCurrentPage, setPages} = usePages()
     const [elementHovered, setElementHovered] = useState(false)
-    const [{isDragging}, drag] = useDrag<DragItem, unknown, { isDragging: boolean }>({
+    const [{isDragging}, drag, dragPreview] = useDrag<DragItem, unknown, { isDragging: boolean }>({
         type: `element-${pageNo}`,
         item: {id: element.id, pageNo, position: {x: element.position.x, y: element.position.y}},
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         })
     });
+
+
 
     useEffect(() => {
         if (isDragging) {
@@ -102,6 +109,9 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         });
     };
 
+    useEffect(() => {
+        dragPreview(getEmptyImage(), { captureDraggingState: true });
+    }, []);
 
     let ref = React.useRef<HTMLDivElement>(null);
 
@@ -118,7 +128,7 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
                 onClick={() => handleDelete(element)}
                 >Delete element</div>
             }
-            <div ref={ref} key={element.id} style={{...getElementStyle(element)}}
+            <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
                  onClick={(e) => handleClickOnElement(element, e)}
                  onMouseEnter={(e) => handleMouseEnter(e)}
                  onMouseLeave={handleMouseLeave}
