@@ -17,7 +17,6 @@ interface SidebarProps {
     setIsExpanded : React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-
 // eslint-disable-next-line react/display-name
 const Button = React.memo(({ className, onClick, text }: ButtonProps) => (
     <button className={className} onClick={onClick}>{text}</button>

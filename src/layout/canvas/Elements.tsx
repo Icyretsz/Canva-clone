@@ -23,8 +23,8 @@ interface ElementComponentProp {
     pageNo: number;
 }
 
-const Elements = ({page}: ElementsProps) => {
-
+// eslint-disable-next-line react/display-name
+const Elements = React.memo(({page}: ElementsProps) => {
 
     const getElementStyle = (element: Element): React.CSSProperties => {
 
@@ -55,7 +55,7 @@ const Elements = ({page}: ElementsProps) => {
             ))}
         </div>
     );
-};
+});
 
 const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentProp) => {
     const {selectedElement, setSelectedElement, setCurrentPage, setPages} = usePages()

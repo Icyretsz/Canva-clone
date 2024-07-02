@@ -1,6 +1,6 @@
 'use client'
 
-import React, {createContext, ReactNode, useContext, useState} from "react";
+import React, {createContext, ReactNode, useContext, useMemo, useState} from "react";
 import { Page, Element } from '@/layout/interfaces'
 
 
@@ -43,8 +43,17 @@ const PagesProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [selectedElement, setSelectedElement] = useState<Element>(initialElementState)
 
+
+    const contextValue = useMemo(() => ({
+        pages,
+        setPages,
+        currentPage,
+        setCurrentPage,
+        selectedElement,
+        setSelectedElement
+    }), [pages, currentPage, selectedElement])
     return (
-        <PagesContext.Provider value={{pages, setPages, currentPage, setCurrentPage, selectedElement, setSelectedElement}}>
+        <PagesContext.Provider value={contextValue}>
             {children}
         </PagesContext.Provider>
     )
