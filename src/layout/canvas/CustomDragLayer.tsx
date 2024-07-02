@@ -25,9 +25,7 @@ const CustomDragLayer: React.FC<CustomDragLayerProp> = ({ getElementStyle }) => 
         } else {
             return {
                 ...getElementStyle(element),
-                borderWidth: '2px',
-                borderStyle: 'solid',
-                borderColor: 'black',
+
             };
         }
     }

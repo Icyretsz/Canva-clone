@@ -135,8 +135,18 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
                  onClick={(e) => handleClickOnElement(element, e)}
                  onMouseEnter={(e) => handleMouseEnter(e)}
                  onMouseLeave={handleMouseLeave}
-                 className={`${elementHovered || selectedElement.id === element.id ? 'border-2 border-black' : 'border-2 border-transparent'}`}
-            ></div>
+            >{elementHovered || selectedElement.id === element.id ? <div style={{
+                backgroundColor: 'transparent',
+                width: `${element.size.width}px`,
+                height: `${element.size.height}px`,
+                borderWidth: '2px',
+                borderColor: 'black',
+                borderStyle: 'solid',
+                position: element.shapeType === 'triangle' ? 'absolute' : 'inherit',
+                top: element.shapeType === 'triangle' ? '50%' : '',
+                left: element.shapeType === 'triangle' ? '50%' : '',
+                transform: element.shapeType === 'triangle' ? 'translate(-50%, 0)' : 'none',
+            }}></div> : ''}</div>
         </div>)
 }
 export default Elements;
