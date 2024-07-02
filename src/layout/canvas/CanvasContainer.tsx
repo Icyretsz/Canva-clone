@@ -1,7 +1,7 @@
 import React from 'react';
-import {usePages} from '@/context/page-context'
+import {usePages} from '@/context/PageContext'
 import { Page } from '../interfaces'
-import Pages from './pages'
+import Pages from './Pages'
 
 const CanvasContainer = () => {
     const {pages, setPages} = usePages()

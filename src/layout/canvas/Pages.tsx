@@ -1,6 +1,6 @@
 import {Element, Page} from "@/layout/interfaces";
-import {usePages} from '@/context/page-context'
-import Elements from './elements'
+import {usePages} from '@/context/PageContext'
+import Elements from './Elements'
 
 import React, {useState} from 'react';
 import {useDrop} from "react-dnd";

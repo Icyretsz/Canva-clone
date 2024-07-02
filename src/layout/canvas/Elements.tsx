@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {CSSProperties, useEffect, useState} from 'react';
 import {Element, Page} from "@/layout/interfaces";
 import {DragSourceMonitor, useDrag} from "react-dnd";
-import {usePages} from '@/context/page-context'
+import {usePages} from '@/context/PageContext'
 
 interface DragItem {
     id: string;
@@ -111,7 +111,6 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
         }
     }, [drag]);
 
-
     return (
         <div className='flex flex-col justify-center items-center gap-2'>
             {(selectedElement.id === element.id && !isDragging) &&
@@ -119,7 +118,7 @@ const ElementComponent = ({element, getElementStyle, pageNo}: ElementComponentPr
                 onClick={() => handleDelete(element)}
                 >Delete element</div>
             }
-            <div ref={ref} key={element.id} style={{...getElementStyle(element), opacity: isDragging ? 0 : 1}}
+            <div ref={ref} key={element.id} style={{...getElementStyle(element)}}
                  onClick={(e) => handleClickOnElement(element, e)}
                  onMouseEnter={(e) => handleMouseEnter(e)}
                  onMouseLeave={handleMouseLeave}

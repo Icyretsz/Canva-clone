@@ -1,4 +1,4 @@
-import {usePages} from "@/context/page-context";
+import {usePages} from "@/context/PageContext";
 import React from "react";
 import {v4 as uuidv4} from 'uuid'
 import {ShapeProperty, Element} from "../interfaces"
@@ -91,7 +91,6 @@ const Shapes = () => {
                     ? {...page, elements: [...page.elements, newElement]}
                     : page
             ))
-        console.log(newElement.id)
     }
 
     const getShapeProperties = (shape : ShapeProperty) => ({

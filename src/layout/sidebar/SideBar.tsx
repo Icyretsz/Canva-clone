@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import ShapesMenu from '@/layout/sidebar/shapesmenu'
+import ShapesMenu from '@/layout/sidebar/ShapeMenu'
 
 interface ButtonProps {
     className: string,
