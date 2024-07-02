@@ -3,6 +3,7 @@ import {usePages} from '@/context/PageContext'
 import Elements from './Elements'
 import CustomDragLayer from './CustomDragLayer'
 import {useDrop} from "react-dnd";
+import React from "react";
 
 interface DragItem {
     id: string;
