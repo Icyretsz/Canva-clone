@@ -30,7 +30,7 @@ const shapeProperties: ShapeProperties = [
         shapeType: 'triangle',
         size: {
             height: 80,
-            width: 40
+            width: 80
         },
         backgroundColor: 'gray'
     }
@@ -56,17 +56,14 @@ const Shapes = () => {
                 type: 'shape',
                 shapeType: shapeProperty.shapeType,
                 size: {
-                    width: 0,
-                    height: 0
+                    width: shapeProperty.size.width,
+                    height: shapeProperty.size.height
                 },
                 position: {
                     x: 200,
                     y: 200
                 },
                 backgroundColor: `${shapeProperty.backgroundColor}`,
-                borderBottom: `${shapeProperty.size.height}px solid `,
-                borderLeft: `${shapeProperty.size.width}px solid transparent`,
-                borderRight: `${shapeProperty.size.width}px solid transparent`,
                 ofPage: currentPage
             }
         } else {
@@ -103,8 +100,8 @@ const Shapes = () => {
         borderRadius: shape.shapeType === 'circle' ? '100%' : '0',
         //for triangle
         borderBottom: shape.shapeType === 'triangle' ? `${shape.size.height}px solid ${shape.backgroundColor}`: "",
-        borderLeft: shape.shapeType === 'triangle' ? `${shape.size.width}px solid transparent`: "",
-        borderRight: shape.shapeType === 'triangle' ? `${shape.size.width}px solid transparent`: "",
+        borderLeft: shape.shapeType === 'triangle' ? `${shape.size.width/2}px solid transparent`: "",
+        borderRight: shape.shapeType === 'triangle' ? `${shape.size.width/2}px solid transparent`: "",
     })
 
 

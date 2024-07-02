@@ -1,6 +1,6 @@
 import { DragLayerMonitor, useDragLayer } from 'react-dnd';
 import { Element } from '../interfaces';
-import React from 'react';
+import React, {CSSProperties} from 'react';
 
 interface CustomDragLayerProp {
     getElementStyle: (element: Element) => React.CSSProperties;
@@ -19,12 +19,20 @@ const CustomDragLayer: React.FC<CustomDragLayerProp> = ({ getElementStyle }) => 
 
     const { element } = item as { element: Element };
 
-    const elementStyle: React.CSSProperties = {
-        ...getElementStyle(element),
-        borderWidth: '2px',
-        borderStyle: 'solid',
-        borderColor: 'black',
-    };
+    const getStyle = (element : Element) : CSSProperties => {
+        if (element.shapeType === 'triangle') {
+            return getElementStyle(element);
+        } else {
+            return {
+                ...getElementStyle(element),
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: 'black',
+            };
+        }
+    }
+
+    const elementStyle: React.CSSProperties = getStyle(element)
 
     return (
         <div

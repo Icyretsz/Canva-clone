@@ -29,25 +29,30 @@ interface ElementComponentProp {
 const Elements = React.memo(({page}: ElementsProps) => {
 
     const getElementStyle = (element: Element): React.CSSProperties => {
-        let style: React.CSSProperties = {}
-        if (element.type == 'shape') {
-            style = {
-                height: `${element.size.height}px`,
-                width: `${element.size.width}px`,
-                backgroundColor: element.shapeType === 'triangle' ? 'white' : element.backgroundColor,
-                position: 'absolute',
-                top: `${element.position.y}px`,
-                left: `${element.position.x}px`,
-                borderRadius: element.shapeType === 'circle' ? '100%' : '0',
-            };
+        const baseStyle: React.CSSProperties = {
+            position: 'absolute',
+            top: `${element.position.y}px`,
+            left: `${element.position.x}px`,
+        };
 
-            if (element.shapeType === 'triangle') {
-                style.borderBottom = `${element.size.height}px solid ${element.backgroundColor}`;
-                style.borderLeft = `${element.size.width}px solid transparent`;
-                style.borderRight = `${element.size.width}px solid transparent`;
-            }
+        if (element.shapeType === 'triangle') {
+            return {
+                ...baseStyle,
+                width: 0,
+                height: 0,
+                borderLeft: `${element.size.width / 2}px solid transparent`,
+                borderRight: `${element.size.width / 2}px solid transparent`,
+                borderBottom: `${element.size.height}px solid ${element.backgroundColor}`,
+            };
         }
-        return style;
+
+        return {
+            ...baseStyle,
+            width: `${element.size.width}px`,
+            height: `${element.size.height}px`,
+            backgroundColor: element.backgroundColor,
+            borderRadius: element.shapeType === 'circle' ? '100%' : '0',
+        };
     };
 
     return (
