@@ -1,6 +1,7 @@
 import { DragLayerMonitor, useDragLayer } from 'react-dnd';
 import { Element } from '../interfaces';
 import React, {CSSProperties} from 'react';
+import {SelectIndicator} from './Elements'
 
 interface CustomDragLayerProp {
     getElementStyle: (element: Element) => React.CSSProperties;
@@ -42,7 +43,7 @@ const CustomDragLayer: React.FC<CustomDragLayerProp> = ({ getElementStyle }) => 
                 left: 0,
                 pointerEvents: 'none',
             }}
-        />
+        ><SelectIndicator element={element}/></div>
     );
 };
 

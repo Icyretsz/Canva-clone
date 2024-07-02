@@ -123,6 +123,8 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
         }
     }, [drag]);
 
+
+
     return (
         <div className='flex flex-col justify-center items-center gap-2'>
             {(selectedElement.id === element.id && !isDragging) &&
@@ -135,18 +137,23 @@ const DraggableComponent = ({element, getElementStyle, pageNo}: ElementComponent
                  onClick={(e) => handleClickOnElement(element, e)}
                  onMouseEnter={(e) => handleMouseEnter(e)}
                  onMouseLeave={handleMouseLeave}
-            >{elementHovered || selectedElement.id === element.id ? <div style={{
-                backgroundColor: 'transparent',
-                width: `${element.size.width}px`,
-                height: `${element.size.height}px`,
-                borderWidth: '2px',
-                borderColor: 'black',
-                borderStyle: 'solid',
-                position: element.shapeType === 'triangle' ? 'absolute' : 'inherit',
-                top: element.shapeType === 'triangle' ? '50%' : '',
-                left: element.shapeType === 'triangle' ? '50%' : '',
-                transform: element.shapeType === 'triangle' ? 'translate(-50%, 0)' : 'none',
-            }}></div> : ''}</div>
+            >{elementHovered || selectedElement.id === element.id ? <SelectIndicator element={element}/> : ''}</div>
         </div>)
 }
+
+export const SelectIndicator : React.FC<{ element: Element }> = ({element}) => {
+    return (
+        <div style = {{backgroundColor: 'transparent',
+            width: `${element.size.width}px`,
+            height: `${element.size.height}px`,
+            borderWidth: '2px',
+            borderColor: 'black',
+            borderStyle: 'solid',
+            position: element.shapeType === 'triangle' ? 'absolute' : 'inherit',
+            top: element.shapeType === 'triangle' ? '50%' : '',
+            left: element.shapeType === 'triangle' ? '50%' : '',
+            transform: element.shapeType === 'triangle' ? 'translate(-50%, 0)' : 'none',}}></div>
+    )
+}
+
 export default Elements;
