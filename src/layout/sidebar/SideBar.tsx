@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import ShapesMenu from '@/layout/sidebar/ShapeMenu'
 
 interface ButtonProps {
@@ -17,32 +17,40 @@ interface SidebarProps {
     setIsExpanded : React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-interface ShapeProperty {
-    id : number,
-    type: string,
-    className : string
-}
-
-type ShapeProperties = ShapeProperty[];
-
 
 // eslint-disable-next-line react/display-name
 const Button = React.memo(({ className, onClick, text }: ButtonProps) => (
     <button className={className} onClick={onClick}>{text}</button>
 ));
 
-const Submenu = ({menuTitle, setIsExpanded}: SubmenuProps) => (
-    <div className='flex flex-col w-88 h-full bg-white border-r-0.5 border-gray-200'>
-        <div className='flex justify-between items-center border-b-0.5 border-gray-200 h-16 text-xl pl-4'>
-            {menuTitle}
-            <span className='cursor-pointer pr-4' onClick={() => setIsExpanded(false)}>X</span>
+// eslint-disable-next-line react/display-name
+
+
+interface SubmenuProps {
+    menuTitle: string,
+    setIsExpanded : React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+// eslint-disable-next-line react/display-name
+const Submenu = React.memo(({menuTitle, setIsExpanded}: SubmenuProps) => {
+    const handleClose = useCallback(() => {
+        setIsExpanded(false);
+    }, [setIsExpanded]);
+
+    return (
+        <div className='flex flex-col w-88 h-full bg-white border-r-0.5 border-gray-200'>
+            <div className='flex justify-between items-center border-b-0.5 border-gray-200 h-16 text-xl pl-4'>
+                {menuTitle}
+                <span className='cursor-pointer pr-4' onClick={handleClose}>X</span>
+            </div>
+            {menuTitle === 'Shape' && <ShapesMenu/>}
         </div>
-        {menuTitle === 'Shape' ? <ShapesMenu/> : ''}
-    </div>
-);
+    );
+});
 
 
-const Sidebar = ({isExpanded, setIsExpanded}: SidebarProps) => {
+// eslint-disable-next-line react/display-name
+const Sidebar = React.memo(({isExpanded, setIsExpanded}: SidebarProps) => {
     const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
 
 
@@ -80,6 +88,6 @@ const Sidebar = ({isExpanded, setIsExpanded}: SidebarProps) => {
             )}
         </div>
     );
-};
+});
 
 export {Sidebar, Button, Submenu}
